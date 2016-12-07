@@ -1,0 +1,13 @@
+This game was realised with the help of several websites, such as :
+     - http://gameinternals.com/
+       To fully understand the original pacman game tricks, such as ghosts behaviour and more.
+     - http://www.gamedev.net/page/index.html
+       To build the algorithm behind ghosts AI.
+
+It uses a sprites sheet found on Richard Hull's repository (https://github.com/rm-hull).
+
+The playlist is the following, in memory of the 80's :
+
+- Hard PacMan Hip Hop Trap Beat/Instrumental
+- Classic 80's Megamix - (Rick Astley, Pet Shop Boys, Forrest, Kool & The Gang, Whitney Houston, Madonna, Taylor Dayne, Black Box)
+
