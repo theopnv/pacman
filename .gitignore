@@ -1,0 +1,8 @@
+pacman
+.high-scores.txt
+.log
+*~
+*.xcf
+
+vgcore*
+gmon.out
