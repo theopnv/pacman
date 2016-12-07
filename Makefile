@@ -1,13 +1,3 @@
-##
-## Makefile for pacman in /home/penava-t/rendu/SDL/Pacman
-##
-## Made by Theo Penavaire
-## Login   <penava-t@epitech.net>
-##
-## Started on  Wed Jun  8 00:25:52 2016 Theo Penavaire
-## Last update Mon Dec  5 01:56:46 2016 John Doe
-##
-
 CC		=	gcc
 RM		=	rm -rf
 NAME		=	pacman
