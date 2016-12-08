@@ -50,11 +50,13 @@ static int	copy_text(t_exe *exe, int file, FILE *new_file, const int excepted)
     {
       if (!(line = get_next_line(file)))
 	return (EXIT_FAILURE);
-      if (i == excepted
-	  && insert(exe, new_file) == EXIT_FAILURE)
-	return (EXIT_FAILURE);
-      else if (i != excepted
-	  && copy(new_file, line) == EXIT_FAILURE)
+      if (i == excepted)
+	{
+	  if (insert(exe, new_file) == EXIT_FAILURE)
+	    return (EXIT_FAILURE);
+	  ++i;
+	}
+      if (copy(new_file, line) == EXIT_FAILURE)
 	return (EXIT_FAILURE);
     }
   if (close(file) == SYS_ERR
@@ -69,23 +71,29 @@ static int	update_high_scores(t_exe *exe)
   int		file;
   int		excepted;
 
+  /* Open high scores file */
   if (!(file = open(HIGH_SCORES, O_RDONLY))
       || !(new_file = fopen(HIGH_SCORES_TMP, "w")))
     return (err_c(errno));
+
+  /* Switch on excepted to know which line is to be replaced by
+     the new score */
   if ((excepted = get_score_to_delete(exe, file)) == NOT_IN_HS)
-    {
-      init_active(exe, MENU);
-      return (EXIT_SUCCESS);
-     }
+  {
+    init_active(exe, MENU);
+    return (EXIT_SUCCESS);
+  }
   if (lseek(file, 0, SEEK_SET) < 0)
     return (err_c(errno));
   if (copy_text(exe, file, new_file, excepted) == EXIT_FAILURE)
     return (EXIT_FAILURE);
+
+  /* Remove temporary copy file, rename static high scores file */
   if (remove(HIGH_SCORES) == SYS_ERR
       || rename(HIGH_SCORES_TMP, HIGH_SCORES) == SYS_ERR)
     return (err_c(errno));
   init_active(exe, MENU);
-    return (EXIT_SUCCESS);
+  return (EXIT_SUCCESS);
 }
 
 int		get_pseudo(t_exe *exe)
@@ -93,6 +101,7 @@ int		get_pseudo(t_exe *exe)
   char		*key;
   int		stop = 0;
   SDL_Event	tmp;
+  static int	counter = 0;
 
   while (!stop)
     {
@@ -102,11 +111,21 @@ int		get_pseudo(t_exe *exe)
 	   switch (tmp.key.keysym.sym)
 	     {
 		case SDLK_ESCAPE:
-		  escape(exe);
+		++counter;
+		if (counter == 2)
+		  {
+		    escape(exe);
+		    counter = 0;
+		  }
 		  break;
 		case SDLK_RETURN:
-		  if (update_high_scores(exe) == EXIT_FAILURE)
-		    return (EXIT_FAILURE);
+		  ++counter;
+		  if (counter == 2)
+		    {
+		      if (update_high_scores(exe) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		      counter = 0;
+		    }
 		  break;
 		case SDLK_BACKSPACE:
 		  --exe->player.i;

@@ -7,6 +7,7 @@ LDFLAGS		=	-lSDLmain -lSDL				\
 			-lSDL_image				\
 			-lSDL_mixer				\
 			-lSDL_ttf
+DFLAGS		=	-pg -g -g3
 
 DIR_LIB		= 	lib/
 DIR_SRC		=	src/
@@ -64,14 +65,19 @@ DYNLIBS		= 	-L./${DIR_LIB} -lgnl -llogger		\
 
 all		:	$(NAME)
 
+dev		:	$(OBJS)
+			$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) $(CFLAGS) $(DFLAGS) $(DYNLIBS)
+			make clean
+
+
 ${NAME}		:	$(OBJS)
-			$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) $(CFLAGS) $(DYNLIBS)
+			@$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) $(CFLAGS) $(DYNLIBS)
 
 clean		:
-			$(RM) $(OBJS)
+			@$(RM) $(OBJS)
 
 fclean		:	clean
-			$(RM) $(NAME)
+			@$(RM) $(NAME)
 
 re		:	fclean all
 
