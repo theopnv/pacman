@@ -101,6 +101,7 @@ int		get_pseudo(t_exe *exe)
   char		*key;
   int		stop = 0;
   SDL_Event	tmp;
+  static int	counter = 0;
 
   while (!stop)
     {
@@ -110,11 +111,21 @@ int		get_pseudo(t_exe *exe)
 	   switch (tmp.key.keysym.sym)
 	     {
 		case SDLK_ESCAPE:
-		  escape(exe);
+		++counter;
+		if (counter == 2)
+		  {
+		    escape(exe);
+		    counter = 0;
+		  }
 		  break;
 		case SDLK_RETURN:
-		  if (update_high_scores(exe) == EXIT_FAILURE)
-		    return (EXIT_FAILURE);
+		  ++counter;
+		  if (counter == 2)
+		    {
+		      if (update_high_scores(exe) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		      counter = 0;
+		    }
 		  break;
 		case SDLK_BACKSPACE:
 		  --exe->player.i;
