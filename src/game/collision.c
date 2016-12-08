@@ -51,7 +51,7 @@ int	collision(t_exe *exe)
 	  if (Mix_Playing(0))
 	    Mix_HaltChannel(0);
 	  lost_life(exe);
-	  if (exe->game.score.lives == 0)
+	  if (exe->game.score.lives <= 0)
 	    init_active(exe,GAME_OVER);
 	}
     }

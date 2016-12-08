@@ -26,7 +26,8 @@ int	launch_game_over(t_exe *exe)
   if (change_music(exe, PAC_TRAP) == EXIT_FAILURE
       || print_game_over(exe) == EXIT_FAILURE)
     return (EXIT_FAILURE);
-  if (is_in_h_scores(exe) == EXIT_SUCCESS)
+  if (get_high_scores(exe) == EXIT_FAILURE
+      || is_in_h_scores(exe) == EXIT_SUCCESS)
     init_active(exe, HIGH_SCORE);
   else
     init_score(exe);

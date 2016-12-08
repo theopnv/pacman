@@ -29,6 +29,7 @@
 # define MADE_BY		("Made by Theo Penavaire")
 # define CREATED_IN		("Created in 2016")
 # define ORIGINAL_GAME		("Original game by Toru Iwatani (1979)")
+# define HS_LINE		("___;000\n")
 
 /************************************\
 *                PATHS               *

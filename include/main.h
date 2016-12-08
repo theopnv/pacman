@@ -34,6 +34,7 @@
 /*****				SCORES
 */
 # define NO_HS			(2)
+# define HS_LINE_LENGTH		(8)
 # define NOT_IN_HS		(11)
 # define PSEUDO_LENGTH		(11)
 # define SCORE_LENGTH		(10)

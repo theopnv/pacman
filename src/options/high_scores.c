@@ -7,6 +7,19 @@
 #include "menu.h"
 #include "parameters.h"
 
+static FILE	*create_high_scores()
+{
+  int		i;
+  FILE		*file;
+
+  if (!(file = fopen(HIGH_SCORES, "w")))
+    return (NULL);
+  for (i = 0; i < NB_HIGH_SCORES; i++)
+    if (!fwrite(HS_LINE, HS_LINE_LENGTH, 1, file))
+      return (NULL);
+  return (file);
+}
+
 static int	flush_high_scores(t_exe *exe, const int i, const char *line)
 {
   int		c;
@@ -36,7 +49,8 @@ int	get_high_scores(t_exe *exe)
   int	i = 0;
   char	line[LINE_LENGTH];
 
-  if (!(file = fopen(HIGH_SCORES, "r")))
+  if (!(file = fopen(HIGH_SCORES, "r"))
+      && !(file = create_high_scores()))
     return (err_c(errno));
   while (!end)
     {

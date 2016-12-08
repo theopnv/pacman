@@ -2,6 +2,7 @@ pacman
 .log
 *~
 *.xcf
+.high-scores.txt
 
 vgcore*
 gmon.out
