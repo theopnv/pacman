@@ -194,7 +194,7 @@ void			find_i(t_exe *, int *, int);
 void			init_events(t_exe *);
 void			init_active(t_exe *, const int);
 void			init_score(t_exe *);
-void			init_game(t_exe *);
+void			init_game(t_exe *, const int);
 void			init_ch(t_exe *, const int, const int,
 				const int, const char *);
 char			*get_next_line(const int);

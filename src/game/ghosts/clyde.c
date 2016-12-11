@@ -28,7 +28,9 @@ static t_coor	target_clyde(t_exe *exe)
 int	clyde(t_exe *exe)
 {
   exe->game.ch[CLYDE].state = UP;
-  if (exe->game.score.catched_goms >= exe->game.score.total_goms / 20)
+  fprintf(stderr, "catched: %d\n", exe->game.score.catched_goms);
+  fprintf(stderr, "%d\n", exe->game.score.total_goms);
+  if (exe->game.score.catched_goms >= exe->game.score.total_goms / 3)
     {
       exe->game.ch[CLYDE].target = target_clyde(exe);
       if (process_ghost(exe, CLYDE) == EXIT_FAILURE)

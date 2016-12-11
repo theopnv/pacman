@@ -28,10 +28,11 @@ int	launch_game_over(t_exe *exe)
     return (EXIT_FAILURE);
   if (get_high_scores(exe) == EXIT_FAILURE
       || is_in_h_scores(exe) == EXIT_SUCCESS)
-    init_active(exe, HIGH_SCORE);
+    {
+      init_active(exe, HIGH_SCORE);
+      init_game(exe, NOREINIT);
+    }
   else
-    init_score(exe);
-  init_game(exe);
-  init_goms(exe);
+    init_game(exe, REINIT);
   return (EXIT_SUCCESS);
 }

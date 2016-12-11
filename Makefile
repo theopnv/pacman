@@ -25,6 +25,7 @@ SRCS		=	${DIR_SRC}main.c			\
 			${DIR_SRC}free.c
 
 INIT		=	${DIR_INIT}init.c			\
+			${DIR_INIT}init_game.c			\
 			${DIR_INIT}create_map.c			\
 			${DIR_INIT}init_goms.c			\
 			${DIR_INIT}create_accur_map.c		\

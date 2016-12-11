@@ -36,7 +36,7 @@ static int	print_lives(t_exe *exe)
 static void	lost_life(t_exe *exe)
 {
   --exe->game.score.lives;
-  init_game(exe);
+  init_game(exe, NOREINIT);
 }
 
 int	collision(t_exe *exe)
