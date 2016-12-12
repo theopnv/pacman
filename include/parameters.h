@@ -2,6 +2,13 @@
 # define			PARAMETERS_H_
 
 /************************************\
+*             ARGUMENTS              *
+\************************************/
+
+# define ARG_DEBUG		("--debug")
+# define ARG_DEBUG_LENGTH	(7)
+
+/************************************\
 *               COLORS               *
 \************************************/
 
@@ -51,6 +58,5 @@
 # define HIGH_SCORES_TMP	(".hs-tmp.txt")
 # define MAP			("ressources/maps/map_1.pc")
 # define FONT			("ressources/font/font.ttf")
-
 
 #endif				/* PARAMETERS_H_ */

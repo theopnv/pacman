@@ -43,7 +43,8 @@ t_coor          *algo_the_chase(const t_coor pos, const t_coor target,
   while (!end)
     {
       lower = calc_lower(chase);
-      update_arrays(chase, lower);
+      if (update_arrays(chase, lower) == EXIT_FAILURE)
+      	return (NULL);
       add_in(chase, ext);
       end = end_condition(chase, ext->target);
     }

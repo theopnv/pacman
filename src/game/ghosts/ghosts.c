@@ -47,9 +47,9 @@ int		the_chase(t_exe *exe, const int id)
   t_coor	*path;
 
   exe->game.ch[id].old_accur_pos = exe->game.ch[id].accur_pos;
-  path = algo_the_chase(exe->game.ch[id].pos,
-  exe->game.ch[id].target, exe->game.map.map);
-  exe->game.ch[id].path = path;
+  if ((path = algo_the_chase(exe->game.ch[id].pos,
+      exe->game.ch[id].target, exe->game.map.map)))
+    exe->game.ch[id].path = path;
   if (!exe->game.ch[id].path || init_accur_path(exe, id, &size) == EXIT_FAILURE)
     return (EXIT_FAILURE);
   flush_accur_path(exe, id, size);

@@ -1,6 +1,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include "menu.h"
+#include "parameters.h"
+
+int			g_debug = 0;
+
+static void		handle_arguments(const int ac, char **av)
+{
+  if (ac > 1)
+    if (!strncmp(av[1], ARG_DEBUG, ARG_DEBUG_LENGTH))
+      g_debug = 1;
+}
 
 static int		mainloop(t_exe *exe)
 {
@@ -32,14 +42,14 @@ static int		mainloop(t_exe *exe)
   return (EXIT_SUCCESS);
 }
 
-int	main(__attribute__((unused)) int ac,
-	     __attribute__((unused)) char **av)
+int	main(int ac, char **av)
 {
   t_exe	exe;
 
   srand(time(NULL));
   if (init(&exe) == EXIT_FAILURE)
     return (EXIT_FAILURE);
+  handle_arguments(ac, av);
   while (!exe.exit)
     if (mainloop(&exe) == EXIT_FAILURE)
       return (EXIT_FAILURE);

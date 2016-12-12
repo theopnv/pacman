@@ -57,8 +57,8 @@ typedef struct		s_external_elements
   char			**map;
 }			t_ext;
 
-void			update_arrays(t_the_chase *, const int);
 void			add_in(t_the_chase *, const t_ext *ext);
+int			update_arrays(t_the_chase *, const int);
 int			end_condition(const t_the_chase *, const t_coor);
 int			calc_lower(const t_the_chase *);
 t_coor			*flush_path(t_the_chase *);
