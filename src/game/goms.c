@@ -45,21 +45,24 @@ static int	aff_goms(t_exe *exe)
 {
   int		y, x;
   SDL_Rect	dstrect;
-  SDL_Surface	*gom;
+  SDL_Surface	*gom = NULL;
+  SDL_Surface	*optimized = NULL;
 
-  dstrect.y = MARGE_Y;
+  dstrect.y = MARGE_Y + TILE / 2;
   for (y = 0; y < M_HEIGHT; y++)
     {
-      dstrect.x = MARGE_X;
+      dstrect.x = MARGE_X + TILE / 2;
       for (x = 0; x < M_WIDTH; x++)
     	{
     	  if (exe->game.map.goms[y][x] == 1)
     	    {
     	      if (!(gom = IMG_Load(IMG_GOM)))
     		return (err_sdl(IMG_GetError()));
-    	      if (SDL_BlitSurface(gom, NULL, exe->screen, &dstrect) < 0)
+    	      if (!(optimized = SDL_DisplayFormat(gom))
+	      	  || SDL_BlitSurface(optimized, NULL, exe->screen, &dstrect) < 0)
     		return (err_sdl(SDL_GetError()));
-    	      SDL_FreeSurface(gom);
+    	      SDL_FreeSurface(optimized);
+	      SDL_FreeSurface(gom);
     	    }
     	  dstrect.x += TILE;
     	}
