@@ -15,33 +15,6 @@ void	init_active(t_exe *exe, const int active)
       exe->active[active] = 1;
 }
 
-void	init_score(t_exe *exe)
-{
-  int	 i;
-
-  for (i = 0; i < NB_HIGH_SCORES; i++)
-  {
-    exe->game.score.high_scores[i].pseudo = NULL;
-    exe->game.score.high_scores[i].score = NULL;
-  }
-  get_high_scores(exe);
-  exe->game.score.lives = 3;
-  exe->game.score.total_goms = 0;
-  exe->game.score.catched_goms = 0;
-  exe->game.score.lvl = 1;
-  exe->game.score.score = 0;
-}
-
-void	init_events(t_exe *exe)
-{
-  /* Initialize events */
-  exe->param.input[UP] = 0;
-  exe->param.input[DOWN] = 0;
-  exe->param.input[LEFT] = 0;
-  exe->param.input[RIGHT] = 0;
-  exe->param.input[PAUSE] = 0;
-}
-
 static void	init_controls(t_exe *exe)
 {
   /* Default controls */
@@ -51,28 +24,6 @@ static void	init_controls(t_exe *exe)
   exe->param.controls[RIGHT].key.keysym.sym = SDLK_RIGHT;
   exe->param.controls[PAUSE].key.keysym.sym = SDLK_SPACE;
   init_events(exe);
-}
-
-void	init_ch(t_exe *exe, const int id,
-		const int abs, const int ord,
-		const char *img_path)
-{
-  if (id == PAC)
-    {
-      exe->game.ch[PAC].dir = -1;
-      exe->game.ch[PAC].next_dir = -1;
-    }
-  else
-    {
-      exe->game.ch[id].accur_path = NULL;
-      exe->game.ch[id].prev_time = 0;
-    }
-  exe->game.ch[id].accur_pos.x = abs * TILE;
-  exe->game.ch[id].accur_pos.y = ord * TILE;
-  exe->game.ch[id].pos.x = abs;
-  exe->game.ch[id].pos.y = ord;
-  exe->game.ch[id].sprite = IMG_Load(img_path);
-  exe->game.ch[id].state = PAUSE;
 }
 
 int 	init_player(t_exe *exe)
@@ -87,15 +38,6 @@ int 	init_player(t_exe *exe)
     exe->player.pseudo[i] = 'a';
   exe->player.i = 0;
   return (EXIT_SUCCESS);
-}
-
-void	init_game(t_exe *exe)
-{
-  init_ch(exe, PAC, START_ABS, START_ORD, IMG_PAC);
-  init_ch(exe, BLINKY, START_ABS, START_ORD - 6, IMG_BLINKY);
-  init_ch(exe, INKY, START_ABS - 1, START_ORD - 3, IMG_INKY);
-  init_ch(exe, PINKY, START_ABS, START_ORD - 3, IMG_PINKY);
-  init_ch(exe, CLYDE, START_ABS + 1, START_ORD - 3, IMG_CLYDE);
 }
 
 static int	init_struct(t_exe *exe)
@@ -133,14 +75,12 @@ int	init(t_exe *exe)
 
   SDL_WM_SetIcon(SDL_LoadBMP(IMG_ICON), NULL);
   SDL_WM_SetCaption(WIN_NAME, NULL);
-  init_score(exe);
   if (init_struct(exe) == EXIT_FAILURE
       || init_player(exe) == EXIT_FAILURE
       || create_map(exe) == EXIT_FAILURE
-      || init_goms(exe) == EXIT_FAILURE
       || init_music(exe) == EXIT_FAILURE)
     return (EXIT_FAILURE);
-  init_game(exe);
+  init_game(exe, REINIT);
   init_controls(exe);
   return (EXIT_SUCCESS);
 }

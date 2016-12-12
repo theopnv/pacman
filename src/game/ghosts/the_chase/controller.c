@@ -8,7 +8,7 @@ static int   in_array(const t_coor cell, t_cell **array)
   int         i;
 
   i = -1;
-  while (++i < STACK_SIZE)
+  while (++i < STACK_SIZE && array[i]->cell.y != -1)
     if (array[i]->cell.y == cell.y && array[i]->cell.x == cell.x)
       return (EXIT_SUCCESS);
   return (EXIT_FAILURE);
@@ -19,29 +19,21 @@ static void   update_distances(t_the_chase *c, const t_coor dir,
 {
   t_coor      H;
 
-  if (in_array(dir, c->in.array) == EXIT_FAILURE)
-    {
-      ++c->in.idx;
-      /* Record node in open list */
-      c->in.array[c->in.idx]->cell = dir;
-      /* Make current node its parent */
-      c->in.array[c->in.idx]->parent = c->out.array[c->last_out];
-      /* G cost : Distance done */
-      c->in.array[c->in.idx]->G = c->in.array[c->in.idx]->parent->G + 1;
-      /* H cost : Estimated distance left */
-      if ((H.x = target.y - dir.y) < 0)
-        H.x *= -1;
-      if ((H.y = target.x - dir.x) < 0)
-        H.y *= -1;
-      c->in.array[c->in.idx]->H = H.y + H.y;
-      /* F cost : sum */
-      c->in.array[c->in.idx]->F =
-        c->in.array[c->in.idx]->G + c->in.array[c->in.idx]->H;
-    }
-  /* TODO:
-    else if (dir already in open list) {
-      check if G cost is lower by this new path
-  }*/
+  ++c->in.idx;
+  /* Record node in open list */
+  c->in.array[c->in.idx]->cell = dir;
+  /* Make current node its parent */
+  c->in.array[c->in.idx]->parent = c->out.array[c->last_out];
+  /* G cost : Distance done */
+  c->in.array[c->in.idx]->G = c->in.array[c->in.idx]->parent->G + 1;
+   /* H cost : Estimated distance left */
+   if ((H.x = target.y - dir.y) < 0)
+     H.x *= -1;
+   if ((H.y = target.x - dir.x) < 0)
+     H.y *= -1;
+   c->in.array[c->in.idx]->H = H.y + H.y;
+   /* F cost : sum */
+   c->in.array[c->in.idx]->F = c->in.array[c->in.idx]->G + c->in.array[c->in.idx]->H;
 }
 
 /*

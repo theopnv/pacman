@@ -7,7 +7,7 @@ LDFLAGS		=	-lSDLmain -lSDL				\
 			-lSDL_image				\
 			-lSDL_mixer				\
 			-lSDL_ttf
-DFLAGS		=	-pg -g -g3
+DFLAGS		=	-pg -g3
 
 DIR_LIB		= 	lib/
 DIR_SRC		=	src/
@@ -25,6 +25,7 @@ SRCS		=	${DIR_SRC}main.c			\
 			${DIR_SRC}free.c
 
 INIT		=	${DIR_INIT}init.c			\
+			${DIR_INIT}init_game.c			\
 			${DIR_INIT}create_map.c			\
 			${DIR_INIT}init_goms.c			\
 			${DIR_INIT}create_accur_map.c		\

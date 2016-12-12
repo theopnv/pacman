@@ -111,12 +111,12 @@ int		get_pseudo(t_exe *exe)
 	   switch (tmp.key.keysym.sym)
 	     {
 		case SDLK_ESCAPE:
-		++counter;
-		if (counter == 2)
-		  {
-		    escape(exe);
-		    counter = 0;
-		  }
+		  ++counter;
+		  if (counter == 2)
+		    {
+		      escape(exe);
+		      counter = 0;
+		    }
 		  break;
 		case SDLK_RETURN:
 		  ++counter;

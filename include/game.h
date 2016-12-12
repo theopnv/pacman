@@ -3,6 +3,9 @@
 
 # include			"main.h"
 
+# define REINIT			(1)
+# define NOREINIT		(0)
+
 /************************************\
 *            CHARACTERS              *
 \************************************/
