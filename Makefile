@@ -7,7 +7,7 @@ LDFLAGS		=	-lSDLmain -lSDL				\
 			-lSDL_image				\
 			-lSDL_mixer				\
 			-lSDL_ttf
-DFLAGS		=	-pg -g -g3
+DFLAGS		=	-pg -g3
 
 DIR_LIB		= 	lib/
 DIR_SRC		=	src/
