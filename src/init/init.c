@@ -4,6 +4,44 @@
 #include "menu.h"
 #include "parameters.h"
 
+extern const t_char	g_assoc_map[NB_TILES];
+
+static int	build_map(t_exe *exe)
+{
+  int		tab;
+  int		y, x;
+  SDL_Rect	srcrect, dstrect;
+
+  if (!(exe->game.s_map = SDL_CreateRGBSurface(0, (M_WIDTH + 1)* TILE,
+	  M_HEIGHT * TILE, 32, 0, 0, 0, 0)))
+    return (EXIT_FAILURE);
+  dstrect.y = 0;
+  srcrect.y = 0;
+  srcrect.w = TILE;
+  srcrect.h = TILE;
+  for (y = 0; y < M_HEIGHT; y++)
+    {
+      dstrect.x = MARGE_X;
+      for (x = 0; x < M_WIDTH; x++)
+	{
+	  for (tab = 0; tab < NB_TILES; tab++)
+	    if (exe->game.map.map[y][x] == g_assoc_map[tab].key)
+	      {
+		/* Fill blocks of >= 3x3 with blank tile */
+		if (g_assoc_map[tab].key == 'p')
+		  srcrect.x = 0;
+		else
+		  srcrect.x = g_assoc_map[tab].idx * TILE;
+	      }
+	  if (SDL_BlitSurface(exe->game.maze_sprite, &srcrect, exe->game.s_map, &dstrect) < 0)
+	    return (err_sdl(SDL_GetError()));
+	  dstrect.x += TILE;
+	}
+      dstrect.y += TILE;
+    }
+  return (EXIT_SUCCESS);
+}
+
 void	init_active(t_exe *exe, const int active)
 {
   int	menu_opt = -1;
@@ -82,5 +120,6 @@ int	init(t_exe *exe)
     return (EXIT_FAILURE);
   init_game(exe, REINIT);
   init_controls(exe);
+  build_map(exe);
   return (EXIT_SUCCESS);
 }

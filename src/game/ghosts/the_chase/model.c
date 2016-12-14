@@ -56,6 +56,8 @@ t_coor		*flush_path(t_the_chase *chase)
 
 int		update_arrays(t_the_chase *chase, const int lower)
 {
+  if (g_debug)
+    logger("INFO|0\n");
   chase->last_out = chase->out.idx;
   if (chase->out.array[chase->last_out] && chase->out.array[chase->last_out]->cell.y
       && chase->in.array[lower] && chase->in.array[lower]->cell.y)

@@ -9,6 +9,8 @@ To be compiled, this project requires the SDL librairy, plus SDL_ttf, SDL_image 
 * `$ make` to build the project and get the binary file.
 * `$ make clean` to remove compilation files
 
+To write available logs in the log file, execute the game with the `--debug` argument.
+
 ## Project
 
 Updates are programmed to take place on a regular basis. On the first time, I'll focus on stability and performance updates, but very soon, new features will be implemented !

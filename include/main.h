@@ -157,6 +157,7 @@ typedef struct		s_game
   t_map			map;
   t_score		score;
   SDL_Surface		*maze_sprite;
+  SDL_Surface		*s_map;
   t_character		ch[5];
 }			t_game;
 
