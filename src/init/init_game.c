@@ -13,7 +13,7 @@ void	init_score(t_exe *exe)
     exe->game.score.high_scores[i].score = NULL;
   }
   get_high_scores(exe);
-  exe->game.score.lives = 3;
+  exe->game.score.lives = 2;
   exe->game.score.total_goms = 0;
   exe->game.score.catched_goms = 0;
   exe->game.score.lvl = 1;

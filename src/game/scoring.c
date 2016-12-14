@@ -83,6 +83,8 @@ static void     calc_level(t_exe *exe)
       && exe->game.score.catched_goms % exe->game.score.total_goms == 0)
     {
       ++exe->game.score.lvl;
+      if ((exe->game.score.lvl - 1) % 2 == 0)
+      	exe->game.score.lives = 2;
       init_goms(exe);
     }
 }
