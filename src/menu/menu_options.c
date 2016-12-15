@@ -12,7 +12,7 @@ static int	aff(t_exe *exe, t_menu *menu)
   if (!(menu->font = TTF_OpenFont(FONT, 65)))
     return (err_sdl(TTF_GetError()));
   pos.y = Y_LOGO + 130;
-  while (++i < NB_MENU_OPT - 3)
+  while (++i < SELECTABLE)
     {
       if (menu->selected != i)
 	{
@@ -38,7 +38,7 @@ int		menu_options(t_exe *exe, t_menu *menu)
 {
   static int	i = 0;
 
-  find_i(exe, &i, NB_MENU_OPT - 2);
+  find_i(exe, &i, SELECTABLE);
   menu->selected = i;
   if (aff(exe, menu) == EXIT_FAILURE)
     return (EXIT_FAILURE);

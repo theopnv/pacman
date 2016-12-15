@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "menu.h"
+#include "game.h"
 #include "parameters.h"
 
 int	err_c(const int errnum)
@@ -23,8 +24,12 @@ int	escape(t_exe *exe)
      exe->exit = 1;
   else
     {
-      if (exe->active[GAME] == 1 && change_music(exe, PAC_TRAP) == EXIT_FAILURE)
-	return (EXIT_FAILURE);
+      if (exe->active[GAME] == 1 || exe->active[STARTUP])
+	{
+	  init_game(exe, REINIT);
+	  if (change_music(exe, PAC_TRAP) == EXIT_FAILURE)
+	    return (EXIT_FAILURE);
+	}
       init_active(exe, MENU);
     }
   return (EXIT_SUCCESS);
@@ -41,8 +46,6 @@ int	change_music(t_exe *exe, char *path)
 
 void	find_i(t_exe *exe, int *i, int nb_lines)
 {
-  if (exe->active[MENU] == 1)
-    nb_lines -= 1;
   if (exe->param.input[DOWN] == 1)
     ++(*i);
   if (exe->param.input[UP] == 1)

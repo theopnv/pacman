@@ -7,7 +7,7 @@ static void	free_menu(t_menu *menu)
 {
   int		i = -1;
 
-  while (++i < NB_MENU_OPT - 3)
+  while (++i < SELECTABLE)
     SDL_FreeSurface(menu->text[i]);
   SDL_FreeSurface(menu->logo);
   TTF_CloseFont(menu->font);

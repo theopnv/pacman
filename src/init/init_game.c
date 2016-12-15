@@ -13,7 +13,7 @@ void	init_score(t_exe *exe)
     exe->game.score.high_scores[i].score = NULL;
   }
   get_high_scores(exe);
-  exe->game.score.lives = 3;
+  exe->game.score.lives = 2;
   exe->game.score.total_goms = 0;
   exe->game.score.catched_goms = 0;
   exe->game.score.lvl = 1;
@@ -38,18 +38,19 @@ void	init_ch(t_exe *exe, const int id,
     {
       exe->game.ch[PAC].dir = -1;
       exe->game.ch[PAC].next_dir = -1;
+      exe->game.ch[PAC].state = PAUSE;
     }
   else
     {
       exe->game.ch[id].accur_path = NULL;
       exe->game.ch[id].prev_time = 0;
+      exe->game.ch[id].state = UP;
     }
   exe->game.ch[id].accur_pos.x = abs * TILE;
   exe->game.ch[id].accur_pos.y = ord * TILE;
   exe->game.ch[id].pos.x = abs;
   exe->game.ch[id].pos.y = ord;
   exe->game.ch[id].sprite = IMG_Load(img_path);
-  exe->game.ch[id].state = PAUSE;
 }
 
 void	init_game(t_exe *exe, const int dead)
@@ -61,6 +62,7 @@ void	init_game(t_exe *exe, const int dead)
   init_ch(exe, CLYDE, START_ABS + 1, START_ORD - 3, IMG_CLYDE);
   if (dead)
     {
+      exe->game.startup = 0;
       init_score(exe);
       init_goms(exe);
     }
