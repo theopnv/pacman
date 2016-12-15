@@ -33,7 +33,8 @@ INIT		=	${DIR_INIT}init.c			\
 MENU		=	${DIR_MENU}menu.c			\
 			${DIR_MENU}menu_options.c
 
-GAME		=	${DIR_GAME}launch_game.c		\
+GAME		=	${DIR_GAME}launch_startup.c		\
+			${DIR_GAME}launch_game.c		\
 			${DIR_GAME}pacman.c			\
 			${DIR_GAME}goms.c			\
 			${DIR_GAME}scoring.c			\

@@ -22,6 +22,7 @@ static int		mainloop(t_exe *exe)
       launch_scores,
       launch_credits,
       launch_menu,
+      launch_startup,
       launch_high_score,
       launch_game_over
      };

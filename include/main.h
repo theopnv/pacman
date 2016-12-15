@@ -154,6 +154,8 @@ typedef struct		s_player
 
 typedef struct		s_game
 {
+  int			startup;
+  int			startup_time;
   t_map			map;
   t_score		score;
   SDL_Surface		*maze_sprite;
@@ -164,7 +166,7 @@ typedef struct		s_game
 typedef struct		s_exe
 {
   int			exit;
-  int			active[7/*NB_MENU_OPT*/];
+  int			active[8/*NB_MENU_OPT*/];
   SDL_Event		event;
   SDL_Surface		*screen;
   Mix_Music		*music;
@@ -217,6 +219,7 @@ int			init(t_exe *);
 int			create_map(t_exe *);
 int			err_c(const int);
 int			err_sdl(const char *);
+int			launch_startup(t_exe *);
 int			launch_menu(t_exe *);
 int			launch_game(t_exe *);
 int			launch_controls(t_exe *);

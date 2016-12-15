@@ -55,6 +55,7 @@ int				clyde(t_exe *exe);
 int				goms(t_exe *);
 int				collision(t_exe *);
 int				scoring(t_exe *);
+int				print_lives(t_exe *exe);
 int				init_accur_path(t_exe *, const int, int *);
 t_coor				*algo_the_chase(const t_coor, const t_coor, char **);
 t_coor   			random_path(t_exe *, const int/*, const double*/);

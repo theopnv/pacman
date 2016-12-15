@@ -28,6 +28,8 @@
 # define LEVEL			("LEVEL")
 # define SCORE			("SCORE")
 # define LIVES			("LIVES")
+# define STARTUP_P_ONE		("Player One")
+# define STARTUP_READY		("Ready !")
 # define CONTROLS_HELP		("To assign a new key, press enter")
 # define CONTROLS_ASSIGN	("and choose a key.")
 # define CONTROLS_WARNING	("A key cannot be assigned twice.")

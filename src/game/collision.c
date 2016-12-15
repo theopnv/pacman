@@ -3,7 +3,7 @@
 #include "menu.h"
 #include "parameters.h"
 
-static int	print_lives(t_exe *exe)
+int		print_lives(t_exe *exe)
 {
   char		lives[2];
   TTF_Font	*font;

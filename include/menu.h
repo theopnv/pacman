@@ -7,7 +7,8 @@
 # define LOGO_WIDTH		(830)
 # define Y_LOGO			(50)
 # define Y_OPTION		(120)
-# define NB_MENU_OPT		(7)
+# define NB_MENU_OPT		(8)
+# define SELECTABLE		(4)
 
 typedef enum			s_menu_opt
   {
@@ -16,8 +17,9 @@ typedef enum			s_menu_opt
     SCORES,
     CREDITS,
     MENU,
+    STARTUP,
     HIGH_SCORE,
-	GAME_OVER
+    GAME_OVER
   }				t_menu_opt;
 
 typedef struct		s_menu
@@ -25,8 +27,7 @@ typedef struct		s_menu
   int			selected;
   TTF_Font		*font;
   SDL_Surface		*logo;
-  SDL_Surface		*text[NB_MENU_OPT - 3]; /*MENU & HIGH_SCORE & GAME_OVER
-  						are hidden*/
+  SDL_Surface		*text[SELECTABLE]; /* Only selectable options are visible */
 }			t_menu;
 
 int			menu_options(t_exe *, t_menu *);
