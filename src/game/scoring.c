@@ -25,7 +25,7 @@ static int	print_level(t_exe *exe)
     return (err_sdl(TTF_GetError()));
   _str = TTF_RenderText_Solid(font, LEVEL, blue);
   str_pos.x = calc_center(_str->w);
-  str_pos.y = MARGE_Y;
+  str_pos.y = 100;
   if (exe->game.score.lvl >= INT_MAX)
     exe->game.score.lvl = INT_MAX;
   if (snprintf(lvl, 9, "%d", exe->game.score.lvl) < 0)
@@ -57,7 +57,7 @@ static int	print_score(t_exe *exe)
     return (err_sdl(TTF_GetError()));
   _str = TTF_RenderText_Solid(font, SCORE, blue);
   str_pos.x = calc_center(_str->w);
-  str_pos.y = MARGE_Y + 200;
+  str_pos.y = 350;
   if (exe->game.score.score >= INT_MAX)
     exe->game.score.score = INT_MAX;
   if (snprintf(score, 9, "%d", exe->game.score.score) < 0)

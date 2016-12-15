@@ -1,35 +1,51 @@
 #include <errno.h>
+#include <SDL/SDL_image.h>
 #include "game.h"
 #include "menu.h"
 #include "parameters.h"
 
+static int	print_pac_live(t_exe *exe, SDL_Rect pos)
+{
+  SDL_Surface	*surf;
+
+  surf = IMG_Load(PAC_LIVE);
+  if (SDL_BlitSurface(surf, NULL, exe->screen, &pos) == SYS_ERR)
+    return (err_sdl(SDL_GetError()));
+  return (EXIT_SUCCESS);
+}
+
 int		print_lives(t_exe *exe)
 {
-  char		lives[2];
   TTF_Font	*font;
-  SDL_Surface	*_str, *_int;
+  SDL_Surface	*surf;
   SDL_Color	blue = {0,0,255, 0};
-  SDL_Rect	str_pos, int_pos;
+  SDL_Rect	pos;
 
   if (!(font = TTF_OpenFont(FONT, 50)))
     return (err_sdl(TTF_GetError()));
-  _str = TTF_RenderText_Solid(font, LIVES, blue);
-  str_pos.x = calc_center(_str->w);
-  str_pos.y = MARGE_Y + 400;
-  lives[0] = exe->game.score.lives + '0';
-  lives[1] = '\0';
-  _int = TTF_RenderText_Solid(font, lives, blue);
-  int_pos.x = str_pos.x + (_str->w - _int->w) / 2;
-  int_pos.y = str_pos.y + 75;
-
-  if (!_str || !_int)
+  if (!(surf = TTF_RenderText_Solid(font, LIVES, blue)))
     return (err_sdl(TTF_GetError()));
-  if (SDL_BlitSurface(_str, NULL, exe->screen, &str_pos) == SYS_ERR
-      || SDL_BlitSurface(_int, NULL, exe->screen, &int_pos) == SYS_ERR)
+  pos.x = calc_center(surf->w);
+  pos.y = 580;
+  if (SDL_BlitSurface(surf, NULL, exe->screen, &pos) == SYS_ERR)
     return (err_sdl(SDL_GetError()));
+  SDL_FreeSurface(surf);
   TTF_CloseFont(font);
-  SDL_FreeSurface(_str);
-  SDL_FreeSurface(_int);
+
+  if (exe->game.score.lives >= 1)
+    {
+      pos.y += 75;
+      pos.x += 40;
+      if (print_pac_live(exe, pos) == EXIT_FAILURE)
+    	return (EXIT_FAILURE);
+    }
+
+  if (exe->game.score.lives == 2)
+    {
+      pos.x += 80;
+      if (print_pac_live(exe, pos) == EXIT_FAILURE)
+	return (EXIT_FAILURE);
+    }
   return (EXIT_SUCCESS);
 }
 

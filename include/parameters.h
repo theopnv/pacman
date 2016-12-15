@@ -53,6 +53,7 @@
 # define IMG_CLYDE		("ressources/img/Clyde.png")
 # define IMG_GOM		("ressources/img/gom.png")
 # define IMG_MAZE		("ressources/img/maze_sprites_important.png")
+# define PAC_LIVE		("ressources/img/live.png")
 # define PAC_TRAP		("ressources/sound/menu_music.ogg")
 # define EIGHTIES_MIX		("ressources/sound/80s_mix.ogg")
 # define WAKA			("ressources/sound/waka.wav")
