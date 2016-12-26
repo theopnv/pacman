@@ -1,12 +1,9 @@
 CC		=	gcc
 RM		=	rm -rf
 NAME		=	pacman
-CFLAGS		=	-O3 -W -Wall -Wextra			\
-			-Iinclude
-LDFLAGS		=	-lSDLmain -lSDL				\
-			-lSDL_image				\
-			-lSDL_mixer				\
-			-lSDL_ttf
+INC		=	$(shell sdl2-config --cflags --libs) -Iinclude
+LFLAGS		=	-lSDL2_ttf -lSDL2_mixer -lSDL2_image
+CFLAGS		=	-O3 -W -Wall -Wextra $(INC)
 DFLAGS		=	-pg -g3
 
 DIR_LIB		= 	lib/
@@ -68,12 +65,12 @@ DYNLIBS		= 	-L./${DIR_LIB} -lgnl -llogger		\
 all		:	$(NAME)
 
 dev		:	$(OBJS)
-			$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) $(CFLAGS) $(DFLAGS) $(DYNLIBS)
+			$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LFLAGS) $(DFLAGS) $(DYNLIBS)
 			make clean
 
 
 ${NAME}		:	$(OBJS)
-			@$(CC) -o $(NAME) $(OBJS) $(LDFLAGS) $(CFLAGS) $(DYNLIBS)
+			@$(CC) -o $(NAME) $(OBJS) $(CFLAGS) $(LFLAGS) $(DYNLIBS)
 
 clean		:
 			@$(RM) $(OBJS)

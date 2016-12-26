@@ -1,10 +1,10 @@
 #ifndef				MAIN_H_
 # define			MAIN_H_
 
-# include			<SDL/SDL.h>
-# include			<SDL/SDL_mixer.h>
-# include			<SDL/SDL_ttf.h>
-
+# include			<SDL2/SDL.h>
+# include			<SDL2/SDL_mixer.h>
+# include			<SDL2/SDL_ttf.h>
+# include			<SDL2/SDL_image.h>
 
 /************************************\
 *            MAIN VARIABLES          *
@@ -79,6 +79,7 @@ typedef struct		s_blit_text
   char			*text;
   SDL_Rect		pos;
   SDL_Surface		*surface;
+  SDL_Texture		*texture;
 }			t_bltxt;
 
 typedef struct		s_char
@@ -167,8 +168,10 @@ typedef struct		s_exe
 {
   int			exit;
   int			active[8/*NB_MENU_OPT*/];
+  SDL_Surface		*tmp;
   SDL_Event		event;
-  SDL_Surface		*screen;
+  SDL_Window		*screen;
+  SDL_Renderer		*renderer;
   Mix_Music		*music;
   Mix_Chunk		*waka;
   t_player		player;
@@ -183,7 +186,8 @@ typedef int		(*t_options)(t_exe *);
 typedef struct		s_aff_controls
 {
   TTF_Font		*font;
-  SDL_Surface		*text[2][NB_DIR];
+  SDL_Surface		*s_text[2][NB_DIR];
+  SDL_Texture		*t_text[2][NB_DIR];
 }			t_aff_controls;
 
 /************************************\

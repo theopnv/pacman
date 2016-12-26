@@ -4,21 +4,25 @@
 
 static int	print_game_over(t_exe *exe)
 {
-  SDL_Surface	*text;
+  SDL_Texture	*text;
   SDL_Color	red = {255, 0, 0, 0};
   SDL_Rect	pos;
   TTF_Font	*font;
 
   if (!(font = TTF_OpenFont(FONT, 100)))
     return (err_sdl(TTF_GetError()));
-  text = TTF_RenderText_Solid(font, MSG_GAME_OVER, red);
-  pos.x = WIDTH / 2 - text->w / 2;
-  pos.y = HEIGHT / 2 - text->h / 2;
-  if (SDL_BlitSurface(text, NULL, exe->screen, &pos) == SYS_ERR)
-    return (EXIT_FAILURE);
+  exe->tmp = TTF_RenderText_Solid(font, MSG_GAME_OVER, red);
+  pos.x = WIDTH / 2 - exe->tmp->w / 2;
+  pos.y = HEIGHT / 2 - exe->tmp->h / 2;
+  pos.h = 100;
+  pos.w = exe->tmp->w;
+  if (!(text = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, text, NULL, &pos) < 0)
+    return (err_sdl(SDL_GetError()));
   TTF_CloseFont(font);
-  SDL_FreeSurface(text);
-    return (EXIT_SUCCESS);
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(text);
+  return (EXIT_SUCCESS);
 }
 
 int	launch_game_over(t_exe *exe)

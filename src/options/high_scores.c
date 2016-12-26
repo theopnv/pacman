@@ -84,22 +84,26 @@ int	is_in_h_scores(t_exe *exe)
 
 static int	display_prompt(t_exe *exe)
 {
-  SDL_Surface	*text;
+  SDL_Texture	*text;
   SDL_Color	blue = {0, 0, 255, 0};
   SDL_Rect	pos;
   TTF_Font	*font;
 
   if (!(font = TTF_OpenFont(FONT, 70)))
     return (err_sdl(TTF_GetError()));
-  text = TTF_RenderText_Solid(font, PROMPT_HS, blue);
-  pos.x = WIDTH / 2 - text->w / 2;
+  exe->tmp = TTF_RenderText_Solid(font, PROMPT_HS, blue);
+  pos.x = WIDTH / 2 - exe->tmp->w / 2;
   pos.y = HEIGHT / 3;
+  pos.h = 70;
+  pos.w = exe->tmp->w;
 
-  if (SDL_BlitSurface(text, NULL, exe->screen, &pos) == SYS_ERR)
-    return (EXIT_FAILURE);
+  if (!(text = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, text, NULL, &pos) < 0)
+    return (err_sdl(SDL_GetError()));
   TTF_CloseFont(font);
-  SDL_FreeSurface(text);
-    return (EXIT_SUCCESS);
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(text);
+  return (EXIT_SUCCESS);
 }
 
 int		get_score_to_delete(t_exe *exe, const int file)
@@ -141,20 +145,23 @@ char	*remove_underscores(char *str)
 
 static int 	display_pseudo(t_exe *exe)
 {
-  SDL_Surface	*text;
+  SDL_Texture	*text;
   SDL_Color	blue = {0,0,255,0};
   SDL_Rect	pos;
   TTF_Font	*font;
 
   if (!(font = TTF_OpenFont(FONT, 70)))
    return (err_sdl(TTF_GetError()));
-  text = TTF_RenderText_Solid(font, exe->player.pseudo, blue);
+  exe->tmp = TTF_RenderText_Solid(font, exe->player.pseudo, blue);
   pos.y = HEIGHT / 2;
-  pos.x = WIDTH / 2 - text->w / 2;
-  if (SDL_BlitSurface(text, NULL, exe->screen, &pos) == EXIT_FAILURE)
-    return (err_sdl(SDL_GetError()));
+  pos.x = WIDTH / 2 - exe->tmp->w / 2;
+  pos.h = 70;
+  pos.w = exe->tmp->w;
+  if (!(text = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, text, NULL, &pos) < 0)
   TTF_CloseFont(font);
-  SDL_FreeSurface(text);
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(text);
   return (EXIT_SUCCESS);
 }
 

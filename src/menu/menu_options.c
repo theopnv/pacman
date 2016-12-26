@@ -8,28 +8,32 @@ static int	aff(t_exe *exe, t_menu *menu)
   SDL_Color	white = {255, 255, 255, 0};
   SDL_Color	red = {255, 0, 0, 0};
   SDL_Rect	pos;
+  SDL_Surface	*stext[SELECTABLE];
 
   if (!(menu->font = TTF_OpenFont(FONT, 65)))
     return (err_sdl(TTF_GetError()));
   pos.y = Y_LOGO + 130;
+  pos.h = 65;
   while (++i < SELECTABLE)
     {
       if (menu->selected != i)
 	{
-	  menu->text[i] = TTF_RenderText_Solid(menu->font, options[i], white);
-	  if (!menu->text[i])
+	  if (!(stext[i] = TTF_RenderText_Solid(menu->font, options[i], white)))
 	    return (err_sdl(TTF_GetError()));
 	}
       else
 	{
-	  menu->text[i] = TTF_RenderText_Solid(menu->font, options[i], red);
-	  if (!menu->text[i])
+	  if (!(stext[i] = TTF_RenderText_Solid(menu->font, options[i], red)))
 	    return (err_sdl(TTF_GetError()));
 	}
-      pos.x = (WIDTH / 2) - (menu->text[i]->w / 2);
+      pos.x = (WIDTH / 2) - (stext[i]->w / 2);
       pos.y += Y_OPTION;
-      if (SDL_BlitSurface(menu->text[i], NULL, exe->screen, &pos) == SYS_ERR)
+      pos.w = stext[i]->w;
+      if (!(menu->text[i] = SDL_CreateTextureFromSurface(exe->renderer, stext[i]))
+	  || SDL_RenderCopy(exe->renderer, menu->text[i], NULL, &pos) < 0)
 	return (err_sdl(SDL_GetError()));
+      SDL_FreeSurface(stext[i]);
+      SDL_DestroyTexture(menu->text[i]);
     }
   return (EXIT_SUCCESS);
 }

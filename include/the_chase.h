@@ -1,7 +1,7 @@
 #ifndef				THE_CHASE_H_
 # define			THE_CHASE_H_
 
-# include			<SDL/SDL.h>
+# include			<SDL2/SDL.h>
 
 /* Parametrable macros */
 # define SAFE_CELL  		('a')

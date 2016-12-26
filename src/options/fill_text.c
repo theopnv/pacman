@@ -98,7 +98,7 @@ static int	update_high_scores(t_exe *exe)
 
 int		get_pseudo(t_exe *exe)
 {
-  char		*key;
+  const char	*key;
   int		stop = 0;
   SDL_Event	tmp;
   static int	counter = 0;

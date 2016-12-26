@@ -12,6 +12,8 @@ static int	init_bltxt(t_bltxt *bltxt, char *text, const int y)
   bltxt->text = text;
   bltxt->pos.y = y;
   bltxt->pos.x = WIDTH / 2 - bltxt->surface->w / 2;
+  bltxt->pos.h = 40;
+  bltxt->pos.w = bltxt->surface->w;
   return (EXIT_SUCCESS);
 }
 
@@ -37,9 +39,10 @@ int		launch_credits(t_exe *exe)
     return (EXIT_FAILURE);
   for (i = 0; i < 3; i++)
     {
-      if (SDL_BlitSurface(bltxt[i].surface, NULL, exe->screen, &bltxt[i].pos)
-          == SYS_ERR)
-        return (err_sdl(SDL_GetError()));
+      if (!(bltxt[i].texture = SDL_CreateTextureFromSurface(exe->renderer,
+	    bltxt[i].surface))
+	  || SDL_RenderCopy(exe->renderer, bltxt[i].texture, NULL, &bltxt[i].pos) < 0)
+	return (err_sdl(SDL_GetError()));
       SDL_FreeSurface(bltxt[i].surface);
     }
   free(bltxt);

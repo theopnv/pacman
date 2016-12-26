@@ -42,5 +42,4 @@ void	free_end(t_exe *exe)
   SDL_FreeSurface(exe->game.maze_sprite);
   for (id = 0; id < NB_CH; id++)
     free_ch(exe, id);
-  SDL_FreeSurface(exe->screen);
 }
