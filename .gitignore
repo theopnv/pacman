@@ -6,3 +6,8 @@ pacman
 
 vgcore*
 gmon.out
+
+## Clion
+cmake*
+CMake*
+.idea
