@@ -14,6 +14,7 @@ To write available logs in the log file, execute the game with the `--debug` arg
 ## Project
 
 Updates are programmed to take place on a regular basis. On the first time, I'll focus on stability and performance updates, but very soon, new features will be implemented !
+A public [Trello board](https://trello.com/b/x6A6RNEA) is linked to this repository. It lists all the updates soon available.  
 
 ## Map editor
 
