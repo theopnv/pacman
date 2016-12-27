@@ -34,7 +34,7 @@ int	launch_game_over(t_exe *exe)
       || is_in_h_scores(exe) == EXIT_SUCCESS)
     {
       init_active(exe, HIGH_SCORE);
-      init_game(exe, NOREINIT);
+      init_game(exe, REINIT);
     }
   else
     init_game(exe, REINIT);
