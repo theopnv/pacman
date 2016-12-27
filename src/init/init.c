@@ -1,4 +1,3 @@
-#include <SDL/SDL_image.h>
 #include <errno.h>
 #include "game.h"
 #include "menu.h"
@@ -82,12 +81,19 @@ static int	init_struct(t_exe *exe)
 {
   exe->exit = 0;
   init_active(exe, MENU);
-  if (!(exe->screen = SDL_SetVideoMode(WIDTH, HEIGHT, COLOR_BIT, SDL_HWSURFACE | SDL_DOUBLEBUF)))
+  exe->screen = SDL_CreateWindow(WIN_NAME,
+  		   SDL_WINDOWPOS_CENTERED,
+  		   SDL_WINDOWPOS_CENTERED,
+  		   WIDTH, HEIGHT,
+  		   SDL_WINDOW_OPENGL);
+  exe->renderer = SDL_CreateRenderer(exe->screen, -1, 0);
+  if (!exe->screen || !exe->renderer)
     return (err_sdl(SDL_GetError()));
   exe->param.other_input = 0;
   exe->param.k_repeat.hold = HOLD;
   exe->param.k_repeat.delay = DELAY;
-  exe->game.maze_sprite = IMG_Load(IMG_MAZE);
+  if (!(exe->game.maze_sprite = IMG_Load(IMG_MAZE)))
+    return (err_sdl(SDL_GetError()));
   return (EXIT_SUCCESS);
 }
 
@@ -111,15 +117,13 @@ int	init(t_exe *exe)
   if (TTF_Init() == SYS_ERR)
     return (err_sdl(TTF_GetError()));
 
-  SDL_WM_SetIcon(SDL_LoadBMP(IMG_ICON), NULL);
-  SDL_WM_SetCaption(WIN_NAME, NULL);
   if (init_struct(exe) == EXIT_FAILURE
       || init_player(exe) == EXIT_FAILURE
       || create_map(exe) == EXIT_FAILURE
-      || init_music(exe) == EXIT_FAILURE)
+      || init_music(exe) == EXIT_FAILURE
+      || build_map(exe) == EXIT_FAILURE)
     return (EXIT_FAILURE);
   init_game(exe, REINIT);
   init_controls(exe);
-  build_map(exe);
   return (EXIT_SUCCESS);
 }

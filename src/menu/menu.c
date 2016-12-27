@@ -1,17 +1,6 @@
 #include <stdlib.h>
-#include <SDL/SDL_image.h>
 #include "menu.h"
 #include "parameters.h"
-
-static void	free_menu(t_menu *menu)
-{
-  int		i = -1;
-
-  while (++i < SELECTABLE)
-    SDL_FreeSurface(menu->text[i]);
-  SDL_FreeSurface(menu->logo);
-  TTF_CloseFont(menu->font);
-}
 
 static int	aff_logo(t_exe *exe, t_menu *menu)
 {
@@ -19,9 +8,14 @@ static int	aff_logo(t_exe *exe, t_menu *menu)
 
   pos.x = (WIDTH / 2) - (LOGO_WIDTH / 2);
   pos.y = Y_LOGO;
-  if (!(menu->logo = IMG_Load(IMG_LOGO))
-      || SDL_BlitSurface(menu->logo, NULL, exe->screen, &pos) == SYS_ERR)
+  pos.w = LOGO_WIDTH;
+  pos.h = LOGO_HEIGHT;
+  if (!(exe->tmp = IMG_Load(IMG_LOGO))
+      || !(menu->logo = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, menu->logo, NULL, &pos) < 0)
     return (err_sdl(SDL_GetError()));
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(menu->logo);
   return (EXIT_SUCCESS);
 }
 
@@ -39,6 +33,5 @@ int		launch_menu(t_exe *exe)
       	return (EXIT_FAILURE);
       exe->active[MENU] = 0;
     }
-  free_menu(&menu);
   return (EXIT_SUCCESS);
 }

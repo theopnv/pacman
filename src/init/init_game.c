@@ -1,4 +1,3 @@
-#include <SDL/SDL_image.h>
 #include <errno.h>
 #include "game.h"
 #include "parameters.h"

@@ -28,13 +28,12 @@ static int		mainloop(t_exe *exe)
      };
 
   get_input(exe);
-  if (exe->active[GAME_OVER] == 0)
-    aff_bg(exe);
+  if (exe->active[GAME_OVER] == 0 && aff_bg(exe) == EXIT_FAILURE)
+    return (EXIT_FAILURE);
   for (menu_opt = 0; menu_opt < NB_MENU_OPT; menu_opt++)
     if (exe->active[menu_opt] && menu_tab[menu_opt](exe) == EXIT_FAILURE)
       return (EXIT_FAILURE);
-  if (SDL_Flip(exe->screen) == SYS_ERR)
-    return (err_sdl(SDL_GetError()));
+  SDL_RenderPresent(exe->renderer);
 
   if (!exe->active[GAME])
     SDL_Delay(MENU_FRAME);

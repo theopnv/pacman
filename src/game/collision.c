@@ -1,37 +1,44 @@
 #include <errno.h>
-#include <SDL/SDL_image.h>
 #include "game.h"
 #include "menu.h"
 #include "parameters.h"
 
 static int	print_pac_live(t_exe *exe, SDL_Rect pos)
 {
-  SDL_Surface	*surf;
+  SDL_Texture	*texture;
 
-  surf = IMG_Load(PAC_LIVE);
-  if (SDL_BlitSurface(surf, NULL, exe->screen, &pos) == SYS_ERR)
+  exe->tmp = IMG_Load(PAC_LIVE);
+  if (!(texture = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, texture, NULL, &pos) < 0)
     return (err_sdl(SDL_GetError()));
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(texture);
   return (EXIT_SUCCESS);
 }
 
 int		print_lives(t_exe *exe)
 {
-  TTF_Font	*font;
-  SDL_Surface	*surf;
+  TTF_Font	*font = NULL;
+  SDL_Texture	*texture = NULL;
   SDL_Color	blue = {0,0,255, 0};
   SDL_Rect	pos;
 
   if (!(font = TTF_OpenFont(FONT, 50)))
     return (err_sdl(TTF_GetError()));
-  if (!(surf = TTF_RenderText_Solid(font, LIVES, blue)))
+  if (!(exe->tmp = TTF_RenderText_Solid(font, LIVES, blue)))
     return (err_sdl(TTF_GetError()));
-  pos.x = calc_center(surf->w);
+  pos.x = calc_center(exe->tmp->w);
   pos.y = 580;
-  if (SDL_BlitSurface(surf, NULL, exe->screen, &pos) == SYS_ERR)
+  pos.h = 50;
+  pos.w = exe->tmp->w;
+  if (!(texture = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+      || SDL_RenderCopy(exe->renderer, texture, NULL, &pos) < 0)
     return (err_sdl(SDL_GetError()));
-  SDL_FreeSurface(surf);
+  SDL_FreeSurface(exe->tmp);
+  SDL_DestroyTexture(texture);
   TTF_CloseFont(font);
 
+  pos.h = pos.w = 62;
   if (exe->game.score.lives >= 1)
     {
       pos.y += 75;
@@ -67,7 +74,7 @@ int	collision(t_exe *exe)
 	  if (Mix_Playing(0))
 	    Mix_HaltChannel(0);
 	  lost_life(exe);
-	  if (exe->game.score.lives <= 0)
+	  if (exe->game.score.lives < 0)
 	    init_active(exe,GAME_OVER);
 	}
     }
