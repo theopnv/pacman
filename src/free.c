@@ -18,6 +18,7 @@ static void	free_map(t_exe *exe)
   for (i = 0; i < M_HEIGHT * TILE; i++)
     free(exe->game.map.accur_map[i]);
   free(exe->game.map.accur_map);
+  free(exe->game.s_map);
 }
 
 static void	free_player(t_exe *exe)
@@ -42,5 +43,4 @@ void	free_end(t_exe *exe)
   SDL_FreeSurface(exe->game.maze_sprite);
   for (id = 0; id < NB_CH; id++)
     free_ch(exe, id);
-  SDL_FreeSurface(exe->screen);
 }

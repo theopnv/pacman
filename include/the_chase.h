@@ -1,7 +1,7 @@
 #ifndef				THE_CHASE_H_
 # define			THE_CHASE_H_
 
-# include			<SDL/SDL.h>
+# include			<SDL2/SDL.h>
 
 /* Parametrable macros */
 # define SAFE_CELL  		('a')
@@ -58,6 +58,7 @@ typedef struct		s_external_elements
 }			t_ext;
 
 void			add_in(t_the_chase *, const t_ext *ext);
+int			map_callback(const int, const int);
 int			update_arrays(t_the_chase *, const int);
 int			end_condition(const t_the_chase *, const t_coor);
 int			calc_lower(const t_the_chase *);

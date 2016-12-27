@@ -1,6 +1,6 @@
 #include "the_chase.h"
 
-int		logger(const char *);
+int		logger(const char *, ...);
 extern int	g_debug;
 
 t_cell		*init_parent(t_the_chase *chase)
@@ -56,10 +56,9 @@ t_coor		*flush_path(t_the_chase *chase)
 
 int		update_arrays(t_the_chase *chase, const int lower)
 {
-  if (g_debug)
-    logger("INFO|0\n");
   chase->last_out = chase->out.idx;
-  if (chase->out.array[chase->last_out] && chase->out.array[chase->last_out]->cell.y
+  if (chase->last_out != STACK_SIZE
+      && chase->out.array[chase->last_out] && chase->out.array[chase->last_out]->cell.y
       && chase->in.array[lower] && chase->in.array[lower]->cell.y)
     {
       if (g_debug)

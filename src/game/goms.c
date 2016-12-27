@@ -1,4 +1,3 @@
-#include <SDL/SDL_image.h>
 #include "game.h"
 #include "parameters.h"
 
@@ -45,10 +44,15 @@ static int	aff_goms(t_exe *exe)
 {
   int		y, x;
   SDL_Rect	dstrect;
-  SDL_Surface	*gom = NULL;
-  SDL_Surface	*optimized = NULL;
+  SDL_Surface	*tmp = NULL;
+  SDL_Texture	*gom = NULL;
 
   dstrect.y = MARGE_Y + TILE / 2;
+  dstrect.h = dstrect.w = 5;
+  if (!(tmp = IMG_Load(IMG_GOM)))
+    return (err_sdl(IMG_GetError()));
+  if (!(gom = SDL_CreateTextureFromSurface(exe->renderer, tmp)))
+    return (err_sdl(SDL_GetError()));
   for (y = 0; y < M_HEIGHT; y++)
     {
       dstrect.x = MARGE_X + TILE / 2;
@@ -56,18 +60,15 @@ static int	aff_goms(t_exe *exe)
     	{
     	  if (exe->game.map.goms[y][x] == 1)
     	    {
-    	      if (!(gom = IMG_Load(IMG_GOM)))
-    		return (err_sdl(IMG_GetError()));
-    	      if (!(optimized = SDL_DisplayFormat(gom))
-	      	  || SDL_BlitSurface(optimized, NULL, exe->screen, &dstrect) < 0)
+    	      if (SDL_RenderCopy(exe->renderer, gom, NULL, &dstrect) < 0)
     		return (err_sdl(SDL_GetError()));
-    	      SDL_FreeSurface(optimized);
-	      SDL_FreeSurface(gom);
     	    }
     	  dstrect.x += TILE;
     	}
       dstrect.y += TILE;
     }
+  SDL_FreeSurface(tmp);
+  SDL_DestroyTexture(gom);
   return (EXIT_SUCCESS);
 }
 

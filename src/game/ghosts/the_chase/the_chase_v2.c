@@ -1,5 +1,13 @@
 #include "the_chase.h"
 
+int		map_callback(const int y, const int x)
+{
+  if (y < 1 || y > 30
+      || x < 1 || x > 28)
+    return (1);
+  return (0);
+}
+
 static void	free_the_chase(t_the_chase * chase)
 {
   int i;

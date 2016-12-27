@@ -1,5 +1,8 @@
 #include "the_chase.h"
 
+int		logger(const char *, ...);
+extern int	g_debug;
+
 /*
 * Search cell in array.
 */
@@ -8,7 +11,7 @@ static int   in_array(const t_coor cell, t_cell **array)
   int         i;
 
   i = -1;
-  while (++i < STACK_SIZE && array[i]->cell.y != -1)
+  while (++i < STACK_SIZE && array[i]->cell.y && array[i]->cell.y != -1)
     if (array[i]->cell.y == cell.y && array[i]->cell.x == cell.x)
       return (EXIT_SUCCESS);
   return (EXIT_FAILURE);
@@ -60,8 +63,9 @@ void     add_in(t_the_chase *chase, const t_ext *ext)
 
   i = -1;
   while (++i < NDIR)
-    if (ext->map[dir[i].y][dir[i].x] == SAFE_CELL
-        && in_array(dir[i], chase->out.array) == EXIT_FAILURE)
+    if (!map_callback(dir[i].y, dir[i].x)
+	&& ext->map[dir[i].y][dir[i].x] == SAFE_CELL
+	&& in_array(dir[i], chase->out.array) == EXIT_FAILURE)
       update_distances(chase, dir[i], ext->target);
 }
 
@@ -74,7 +78,7 @@ int      calc_lower(const t_the_chase *chase)
   i = -1;
   lower_i = 0;
   lower = STACK_SIZE;
-  while (chase->in.array[++i]->F != 0)
+  while (chase->in.array[++i]->cell.y != -1 && chase->in.array[i]->F != 0)
     {
       if (chase->in.array[i]->F < lower)
         {

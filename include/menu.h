@@ -1,10 +1,10 @@
 #ifndef				MENU_H_
 # define			MENU_H_
 
-# include			<SDL/SDL_ttf.h>
 # include			"main.h"
 
 # define LOGO_WIDTH		(830)
+# define LOGO_HEIGHT		(192)
 # define Y_LOGO			(50)
 # define Y_OPTION		(120)
 # define NB_MENU_OPT		(8)
@@ -26,8 +26,8 @@ typedef struct		s_menu
 {
   int			selected;
   TTF_Font		*font;
-  SDL_Surface		*logo;
-  SDL_Surface		*text[SELECTABLE]; /* Only selectable options are visible */
+  SDL_Texture		*logo;
+  SDL_Texture		*text[SELECTABLE]; /* Only selectable options are visible */
 }			t_menu;
 
 int			menu_options(t_exe *, t_menu *);

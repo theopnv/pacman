@@ -1,4 +1,3 @@
-pacman
 .log
 *~
 *.xcf
@@ -6,3 +5,8 @@ pacman
 
 vgcore*
 gmon.out
+
+## Clion
+cmake*
+CMake*
+.idea

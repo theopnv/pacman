@@ -2,32 +2,11 @@
 #include "menu.h"
 #include "parameters.h"
 
-static void	free_controls(t_aff_controls *aff)
-{
-  int		i;
-
-  TTF_CloseFont(aff->font);
-  for (i = 0; i < NB_DIR; i++)
-    {
-      SDL_FreeSurface(aff->text[0][i]);
-      SDL_FreeSurface(aff->text[1][i]);
-    }
-}
-
-static void	free_help(TTF_Font *font, SDL_Surface **surf)
-{
-  int		i;
-
-  TTF_CloseFont(font);
-  for (i = 0; i < NB_MSG_CONTROLS; i++)
-    SDL_FreeSurface(surf[i]);
-}
-
 static int	aff_help(t_exe *exe)
 {
   int		h;
   TTF_Font	*font;
-  SDL_Surface	*help[NB_MSG_CONTROLS];
+  SDL_Texture	*help[NB_MSG_CONTROLS];
   SDL_Color	white = {255, 255, 255, 0};
   SDL_Rect	pos;
   const char	*msg[NB_MSG_CONTROLS] =
@@ -36,21 +15,26 @@ static int	aff_help(t_exe *exe)
   if (!(font = TTF_OpenFont(FONT, 30)))
     return (err_sdl(TTF_GetError()));
   pos.y = HEIGHT - 150;
+  pos.h = 30;
   for (h = 0; h < NB_MSG_CONTROLS; h++)
     {
-      help[h] = TTF_RenderText_Solid(font, msg[h], white);
-      pos.x = WIDTH / 2 - help[h]->w / 2;
-      if (SDL_BlitSurface(help[h], NULL, exe->screen, &pos) == SYS_ERR)
+      exe->tmp = TTF_RenderText_Solid(font, msg[h], white);
+      pos.x = WIDTH / 2 - exe->tmp->w / 2;
+      pos.w = exe->tmp->w;
+      if (!(help[h] = SDL_CreateTextureFromSurface(exe->renderer, exe->tmp))
+	  || SDL_RenderCopy(exe->renderer, help[h], NULL, &pos) < 0)
 	return (err_sdl(SDL_GetError()));
+      SDL_FreeSurface(exe->tmp);
+      SDL_DestroyTexture(help[h]);
       pos.y += 50;
     }
-  free_help(font, help);
+  TTF_CloseFont(font);
   return (EXIT_SUCCESS);
 }
 
 static char	*get_key(t_exe *exe, const int i)
 {
-  char		*key_tmp;
+  const char	*key_tmp;
   char		*key;
 
   key_tmp = SDL_GetKeyName(exe->param.controls[i].key.keysym.sym);
@@ -68,23 +52,22 @@ static int	render_text(t_aff_controls *aff, const int i,
   SDL_Color	white = {255, 255, 255, 0};
   SDL_Color	red = {255, 0, 0, 0};
   char		*key;
-
   const char	*options[NB_DIR] =
   {"LEFT", "UP", "RIGHT", "DOWN", "PAUSE"};
 
   key = get_key(exe, i);
   if (i != selected)
     {
-      aff->text[0][i] = TTF_RenderText_Solid(aff->font, options[i], white);
-      aff->text[1][i] = TTF_RenderText_Solid(aff->font, key, white);
+      aff->s_text[0][i] = TTF_RenderText_Solid(aff->font, options[i], white);
+      aff->s_text[1][i] = TTF_RenderText_Solid(aff->font, key, white);
     }
   else
     {
-      aff->text[0][i] = TTF_RenderText_Solid(aff->font, options[i], red);
-      aff->text[1][i] = TTF_RenderText_Solid(aff->font, key, red);
+      aff->s_text[0][i] = TTF_RenderText_Solid(aff->font, options[i], red);
+      aff->s_text[1][i] = TTF_RenderText_Solid(aff->font, key, red);
     }
   free(key);
-  if (!aff->text[0][i] || !aff->text[1][i])
+  if (!aff->s_text[0][i] || !aff->s_text[1][i])
     return (err_sdl(TTF_GetError()));
   return (EXIT_SUCCESS);
 }
@@ -92,25 +75,37 @@ static int	render_text(t_aff_controls *aff, const int i,
 static int		aff_controls_panel(t_exe *exe, const int selected)
 {
   int			i = -1;
-  t_aff_controls	aff;
   SDL_Rect		pos[2];
+  t_aff_controls	aff;
 
   if (!(aff.font = TTF_OpenFont(FONT, 65)))
     return (err_sdl(TTF_GetError()));
   pos[0].y = pos[1].y = 30;
+  pos[0].h = pos[1].h = 65;
   while (++i < NB_DIR)
     {
       if (render_text(&aff, i, exe, selected) == EXIT_FAILURE)
 	return (EXIT_FAILURE);
-      pos[0].x = WIDTH / 2 - (aff.text[0][i]->w + aff.text[1][i]->w) / 2;
-      pos[1].x = pos[0].x + aff.text[0][i]->w + 50;
-      if (SDL_BlitSurface(aff.text[0][i], NULL, exe->screen, &pos[0]) == SYS_ERR
-          || SDL_BlitSurface(aff.text[1][i], NULL, exe->screen, &pos[1]) == SYS_ERR)
+      pos[0].x = WIDTH / 2 - (aff.s_text[0][i]->w + aff.s_text[1][i]->w) / 2;
+      pos[1].x = pos[0].x + aff.s_text[0][i]->w + 50;
+      pos[0].w = aff.s_text[0][i]->w;
+      pos[1].w = aff.s_text[1][i]->w;
+
+      if (!(aff.t_text[0][i] = SDL_CreateTextureFromSurface(exe->renderer,
+	    aff.s_text[0][i]))
+	  || !(aff.t_text[1][i] = SDL_CreateTextureFromSurface(exe->renderer,
+	    aff.s_text[1][i]))
+	  || SDL_RenderCopy(exe->renderer, aff.t_text[0][i], NULL, &pos[0]) < 0
+	  || SDL_RenderCopy(exe->renderer, aff.t_text[1][i], NULL, &pos[1]) < 0)
 	return (err_sdl(SDL_GetError()));
+      SDL_FreeSurface(aff.s_text[0][i]);
+      SDL_FreeSurface(aff.s_text[1][i]);
+      SDL_DestroyTexture(aff.t_text[0][i]);
+      SDL_DestroyTexture(aff.t_text[1][i]);
       pos[0].y += HEIGHT / (NB_DIR + 1);
       pos[1].y += HEIGHT / (NB_DIR + 1);
     }
-  free_controls(&aff);
+  TTF_CloseFont(aff.font);
   return (EXIT_SUCCESS);
 }
 

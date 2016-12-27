@@ -5,26 +5,33 @@
 static int	print_startup(t_exe *exe)
 {
   TTF_Font	*font = NULL;
-  SDL_Surface	*surface[2];
+  SDL_Surface	*tmp[2];
+  SDL_Texture	*texture[2];
   SDL_Color	yellow = {255, 255, 0, 0};
   SDL_Color	cyan = {0, 255, 255, 0};
   SDL_Rect	pos[2];
 
   if (!(font = TTF_OpenFont(FONT, 50)))
     return (err_sdl(TTF_GetError()));
-  surface[0] = TTF_RenderText_Solid(font, STARTUP_P_ONE, cyan);
-  surface[1] = TTF_RenderText_Solid(font, STARTUP_READY, yellow);
-  pos[0].x = M_WIDTH + (M_WIDTH * TILE) / 2 - surface[0]->w / 2;
+  tmp[0] = TTF_RenderText_Solid(font, STARTUP_P_ONE, cyan);
+  tmp[1] = TTF_RenderText_Solid(font, STARTUP_READY, yellow);
+  pos[0].x = M_WIDTH + (M_WIDTH * TILE) / 2 - tmp[0]->w / 2;
   pos[0].y = HEIGHT / 3;
-  pos[1].x = M_WIDTH + (M_WIDTH * TILE) / 2 - surface[1]->w / 2;
+  pos[1].x = M_WIDTH + (M_WIDTH * TILE) / 2 - tmp[1]->w / 2;
   pos[1].y = HEIGHT / 3 * 2;
-  if (SDL_BlitSurface(surface[0], NULL, exe->screen, &pos[0]) == SYS_ERR)
+  pos[0].h = pos[1].h = 50;
+  pos[0].w = tmp[0]->w;
+  pos[1].w = tmp[1]->w;
+  if (!(texture[0] = SDL_CreateTextureFromSurface(exe->renderer, tmp[0]))
+      || !(texture[1] = SDL_CreateTextureFromSurface(exe->renderer, tmp[1]))
+      || SDL_RenderCopy(exe->renderer, texture[0], NULL, &pos[0]) < 0
+      || SDL_RenderCopy(exe->renderer, texture[1], NULL, &pos[1]) < 0)
     return (err_sdl(SDL_GetError()));
-  if (SDL_BlitSurface(surface[1], NULL, exe->screen, &pos[1]) == SYS_ERR)
-    return (err_sdl(SDL_GetError()));
+  SDL_FreeSurface(tmp[0]);
+  SDL_FreeSurface(tmp[1]);
+  SDL_DestroyTexture(texture[0]);
+  SDL_DestroyTexture(texture[1]);
   TTF_CloseFont(font);
-  SDL_FreeSurface(surface[0]);
-  SDL_FreeSurface(surface[1]);
   return (EXIT_SUCCESS);
 }
 

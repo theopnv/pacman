@@ -1,4 +1,3 @@
-#include <SDL/SDL_image.h>
 #include <errno.h>
 #include "game.h"
 #include "parameters.h"
@@ -25,8 +24,8 @@ void	init_events(t_exe *exe)
   /* Initialize events */
   exe->param.input[UP] = 0;
   exe->param.input[DOWN] = 0;
-  exe->param.input[LEFT] = 0;
   exe->param.input[RIGHT] = 0;
+  exe->param.input[LEFT] = 0;
   exe->param.input[PAUSE] = 0;
 }
 
@@ -38,7 +37,8 @@ void	init_ch(t_exe *exe, const int id,
     {
       exe->game.ch[PAC].dir = -1;
       exe->game.ch[PAC].next_dir = -1;
-      exe->game.ch[PAC].state = PAUSE;
+      exe->game.ch[PAC].state = LEFT;
+      exe->game.ch[PAC].dir = LEFT;
     }
   else
     {
