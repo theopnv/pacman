@@ -18,6 +18,7 @@ static void	free_map(t_exe *exe)
   for (i = 0; i < M_HEIGHT * TILE; i++)
     free(exe->game.map.accur_map[i]);
   free(exe->game.map.accur_map);
+  free(exe->game.s_map);
 }
 
 static void	free_player(t_exe *exe)

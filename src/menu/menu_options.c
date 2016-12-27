@@ -35,6 +35,7 @@ static int	aff(t_exe *exe, t_menu *menu)
       SDL_FreeSurface(stext[i]);
       SDL_DestroyTexture(menu->text[i]);
     }
+  TTF_CloseFont(menu->font);
   return (EXIT_SUCCESS);
 }
 

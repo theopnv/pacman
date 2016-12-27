@@ -76,7 +76,6 @@ typedef struct		s_coordinate
 
 typedef struct		s_blit_text
 {
-  char			*text;
   SDL_Rect		pos;
   SDL_Surface		*surface;
   SDL_Texture		*texture;

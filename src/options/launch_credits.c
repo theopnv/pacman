@@ -1,7 +1,7 @@
 #include "parameters.h"
 #include "main.h"
 
-static int	init_bltxt(t_bltxt *bltxt, char *text, const int y)
+static int	init_bltxt(t_bltxt *bltxt, const char *text, const int y)
 {
   TTF_Font	*font;
   SDL_Color	white = {255, 255, 255, 0};
@@ -9,11 +9,11 @@ static int	init_bltxt(t_bltxt *bltxt, char *text, const int y)
   if (!(font = TTF_OpenFont(FONT, 40)))
     return (err_sdl(TTF_GetError()));
   bltxt->surface = TTF_RenderText_Solid(font, text, white);
-  bltxt->text = text;
   bltxt->pos.y = y;
   bltxt->pos.x = WIDTH / 2 - bltxt->surface->w / 2;
   bltxt->pos.h = 40;
   bltxt->pos.w = bltxt->surface->w;
+  TTF_CloseFont(font);
   return (EXIT_SUCCESS);
 }
 
@@ -44,6 +44,7 @@ int		launch_credits(t_exe *exe)
 	  || SDL_RenderCopy(exe->renderer, bltxt[i].texture, NULL, &bltxt[i].pos) < 0)
 	return (err_sdl(SDL_GetError()));
       SDL_FreeSurface(bltxt[i].surface);
+      SDL_DestroyTexture(bltxt[i].texture);
     }
   free(bltxt);
   return (EXIT_SUCCESS);

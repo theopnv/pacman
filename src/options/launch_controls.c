@@ -25,8 +25,10 @@ static int	aff_help(t_exe *exe)
 	  || SDL_RenderCopy(exe->renderer, help[h], NULL, &pos) < 0)
 	return (err_sdl(SDL_GetError()));
       SDL_FreeSurface(exe->tmp);
+      SDL_DestroyTexture(help[h]);
       pos.y += 50;
     }
+  TTF_CloseFont(font);
   return (EXIT_SUCCESS);
 }
 
@@ -50,7 +52,6 @@ static int	render_text(t_aff_controls *aff, const int i,
   SDL_Color	white = {255, 255, 255, 0};
   SDL_Color	red = {255, 0, 0, 0};
   char		*key;
-
   const char	*options[NB_DIR] =
   {"LEFT", "UP", "RIGHT", "DOWN", "PAUSE"};
 
@@ -97,9 +98,14 @@ static int		aff_controls_panel(t_exe *exe, const int selected)
 	  || SDL_RenderCopy(exe->renderer, aff.t_text[0][i], NULL, &pos[0]) < 0
 	  || SDL_RenderCopy(exe->renderer, aff.t_text[1][i], NULL, &pos[1]) < 0)
 	return (err_sdl(SDL_GetError()));
+      SDL_FreeSurface(aff.s_text[0][i]);
+      SDL_FreeSurface(aff.s_text[1][i]);
+      SDL_DestroyTexture(aff.t_text[0][i]);
+      SDL_DestroyTexture(aff.t_text[1][i]);
       pos[0].y += HEIGHT / (NB_DIR + 1);
       pos[1].y += HEIGHT / (NB_DIR + 1);
     }
+  TTF_CloseFont(aff.font);
   return (EXIT_SUCCESS);
 }
 

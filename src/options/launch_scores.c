@@ -57,6 +57,8 @@ static int	print_high_scores(t_exe *exe)
       free(score);
       SDL_FreeSurface(s_hs[PSD]);
       SDL_FreeSurface(s_hs[SCR]);
+      SDL_DestroyTexture(t_hs[PSD]);
+      SDL_DestroyTexture(t_hs[SCR]);
     }
   TTF_CloseFont(font);
   return (EXIT_SUCCESS);
